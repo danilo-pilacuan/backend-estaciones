@@ -119,4 +119,14 @@ export class UsuarioService {
     const result = await this.usuarioRepository.delete(id);
     return { affected: result.affected ?? undefined };
   }
+
+  async getUserByUserEmail(userEmail: string): Promise<Usuario | null> {
+    const usuario = await this.usuarioRepository.findOne({
+        where: { correo: userEmail },
+        relations: ['rol', 'informes', 'readonly'], // Cargar relaciones si es necesario
+    });
+
+    return usuario;
+}
+  
 }

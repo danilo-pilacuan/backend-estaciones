@@ -5,6 +5,7 @@ import { UpdateMedicionDto } from './dto/update-medicion.dto';
 import { ChirpStackPayloadDto } from 'src/medicion/dto/ChirpStackPayloadDto';
 import { ApiQuery } from '@nestjs/swagger';
 
+
 @Controller('medicion')
 export class MedicionController {
   constructor(private readonly medicionService: MedicionService) {}
@@ -63,6 +64,24 @@ return this.medicionService.findByEstacionNumeroSerie(numero_serie,tipo, page, l
     @Body() chirpStackPayloadDto: ChirpStackPayloadDto,
     @Query('event') event: string,
   ) {
+    
+
+    
+
     return this.medicionService.handleChirpstack(chirpStackPayloadDto, event);
+  }
+  
+  @Post('testsocket')
+  testSocket(
+    @Body() socketDto: any,
+    @Query('event') event: string,
+  ) {
+    
+    console.log("socketDto: ")
+    console.log(socketDto)
+
+    
+
+    return this.medicionService.testSocket(socketDto, event);
   }
 }

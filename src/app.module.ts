@@ -20,6 +20,9 @@ import { InformeModule } from './informe/informe.module';
 import { InformeEstacionModule } from './informe-estacion/informe-estacion.module';
 import { MedicionModule } from './medicion/medicion.module';
 import { RolModule } from './rol/rol.module';
+import { AppGateway } from './app.gateway';
+import { SocketModule } from './socket/socket.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -49,9 +52,10 @@ import { RolModule } from './rol/rol.module';
     InformeEstacionModule,
     MedicionModule,
     RolModule,
-    //AuthModule,
+    SocketModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,AppGateway],
 })
 export class AppModule {}

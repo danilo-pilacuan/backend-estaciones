@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Medicion } from './entities/medicion.entity';
 import { TipoMedicion } from 'src/tipo-medicion/entities/tipo-medicion.entity';
 import { Estacion } from 'src/estacion/entities/estacion.entity';
+import { SocketService } from 'src/socket/socket.service';
 
 @Injectable()
 export class MedicionService {
@@ -15,6 +16,7 @@ export class MedicionService {
     @InjectRepository(Medicion) private readonly medicionRepository: Repository<Medicion>,
     @InjectRepository(TipoMedicion) private readonly tipoMedicionRepository: Repository<TipoMedicion>,
     @InjectRepository(Estacion) private readonly estacionRepository: Repository<Estacion>,
+    private readonly socketService:SocketService
   ) {}
 
   // create(createMedicionDto: CreateMedicionDto) {
@@ -182,6 +184,10 @@ export class MedicionService {
         // } as CreateMedicionDto;
         // const medicion = this.medicionRepository.create(medicionNueva);
 
+        if(isNaN(medicionData.value)){
+          continue;
+        }
+
         const medicion = await this.create({
           valor: medicionData.value,
           tipoMedicionId: tipoMedicion.id,
@@ -196,8 +202,16 @@ export class MedicionService {
       }
     }
 
+    this.socketService.sendMessageToClient("STA-"+payload.deviceInfo.devEui,'data_updated',{data:"STA Data Updated"})
+    
+    this.socketService.sendMessageToClient("map_socket",'update_map',{data:"update map now"})
+
     return { message: 'Payload procesado y mediciones guardadas correctamente' };
 
+  }
+  async testSocket(payload: ChirpStackPayloadDto, event: string) {
+    this.socketService.sendMessageToClient(event,'chat_message',{data:"this is a message"})
+    return "okkkk"
   }
 
 }

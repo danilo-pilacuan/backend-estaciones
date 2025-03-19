@@ -19,6 +19,23 @@ export class Medicion {
       })
       estacion: Estacion;
     
-    @CreateDateColumn({ type: 'timestamp' })
-    created_at: Date;
+      @CreateDateColumn({
+        type: 'timestamp',
+        transformer: {
+          to: (value: Date) => value,
+          from: (value: Date) => {
+            // Convierte de UTC a tu zona horaria local (-5 horas para Ecuador)
+            return new Date(value.getTime() ).toLocaleString('es-ES', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false
+          });
+          }
+        }
+      })
+      created_at: Date;
 }
