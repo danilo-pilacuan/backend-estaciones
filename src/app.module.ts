@@ -2,6 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BatchService } from './batch/batch.service';
+import {DatabaseTimezoneService} from './DatabaseTimezoneService';
+
 //import { AuthModule } from './auth/auth.module';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { Estacion } from './estacion/entities/estacion.entity';
@@ -10,6 +14,7 @@ import { TipoMedicion } from './tipo-medicion/entities/tipo-medicion.entity';
 import { Informe } from './informe/entities/informe.entity';
 import { InformeEstacion } from './informe-estacion/entities/informe-estacion.entity';
 import { Medicion } from './medicion/entities/medicion.entity';
+import { MedicionHistorico } from './medicion/entities/medicion-historico.entity';
 import { Rol } from './rol/entities/rol.entity';
 
 import { UsuarioModule } from './usuario/usuario.module';
@@ -39,11 +44,13 @@ import { AuthModule } from './auth/auth.module';
         Informe,
         InformeEstacion,
         Medicion,
+        MedicionHistorico,
         Rol], // here we have added user enitity in entities array
       database: 'red_estaciones',
       synchronize: true,
       logging: true,
     }),
+    ScheduleModule.forRoot(),
     UsuarioModule,
     EstacionModule,
     UnidadModule,
@@ -56,6 +63,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService,AppGateway],
+  providers: [AppService,AppGateway,BatchService,DatabaseTimezoneService],
 })
 export class AppModule {}

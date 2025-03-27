@@ -44,4 +44,12 @@ export class EstacionService {
     const estacion = await this.findOne(id);
     return await this.estacionRepository.remove(estacion);
   }
+
+  async findByNumeroSerie(numero_serie: string): Promise<Estacion> {
+    const estacion = await this.estacionRepository.findOne({ where: { numero_serie } });
+    if (!estacion) {
+      throw new NotFoundException(`Estación con número de serie "${numero_serie}" no encontrada`);
+    }
+    return estacion;
+  }
 }

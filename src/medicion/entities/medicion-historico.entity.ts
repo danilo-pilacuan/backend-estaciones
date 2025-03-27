@@ -2,8 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } f
 import { TipoMedicion } from './../../tipo-medicion/entities/tipo-medicion.entity';
 import { Estacion } from './../../estacion/entities/estacion.entity';
 
-@Entity('medicion')
-export class Medicion {
+@Entity('medicion_historico')
+export class MedicionHistorico {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -19,10 +19,6 @@ export class Medicion {
       })
       estacion: Estacion;
     
-      @CreateDateColumn({
-        type: 'timestamp'})
-        created_at_label: Date;
-      
       @CreateDateColumn({
         type: 'timestamp',
         transformer: {
@@ -42,5 +38,25 @@ export class Medicion {
         }
       })
       created_at: Date;
-      
+
+    
+      @CreateDateColumn({
+        type: 'timestamp',
+        transformer: {
+          to: (value: Date) => value,
+          from: (value: Date) => {
+            // Convierte de UTC a tu zona horaria local (-5 horas para Ecuador)
+            return new Date(value.getTime() ).toLocaleString('es-ES', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false
+          });
+          }
+        }
+      })
+      fecha_paso_historico: Date; // Fecha de almacenamiento en el histórico
 }

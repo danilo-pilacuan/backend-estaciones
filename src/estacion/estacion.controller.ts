@@ -22,6 +22,11 @@ export class EstacionController {
     return this.estacionService.findOne(+id);
   }
 
+  @Get('/bynumserie/:num_serie')
+  findByNumSerie(@Param('num_serie') num_serie: string) {
+    return this.estacionService.findByNumeroSerie(num_serie);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEstacionDto: UpdateEstacionDto) {
     return this.estacionService.update(+id, updateEstacionDto);

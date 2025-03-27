@@ -4,6 +4,7 @@ import { CreateMedicionDto } from './dto/create-medicion.dto';
 import { UpdateMedicionDto } from './dto/update-medicion.dto';
 import { ChirpStackPayloadDto } from 'src/medicion/dto/ChirpStackPayloadDto';
 import { ApiQuery } from '@nestjs/swagger';
+import { MedicionHistorico } from './entities/medicion-historico.entity';
 
 
 @Controller('medicion')
@@ -29,6 +30,21 @@ findByEstacionId(
   @Query('limit') limit: number = 10
 ) {
   return this.medicionService.findByEstacionId(estacionId, page, limit);
+}
+
+@Get('rango-fechas')
+async getHistoricoInRange(
+  @Query('startDate') startDate: string, 
+  @Query('endDate') endDate: string,
+  @Query('numeroSerie') numeroSerie: string,  // Nuevo parámetro para el número de serie
+): Promise<MedicionHistorico[]> {
+  // Validar que se han proporcionado las fechas
+  if (!startDate || !endDate) {
+    throw new Error('Las fechas de inicio y fin son requeridas');
+  }
+
+  // Llamar al servicio para obtener las mediciones históricas en el rango y número de serie
+  return await this.medicionService.findHistoricoInRange(startDate, endDate, numeroSerie);
 }
 
 @Get('getbyestacionytipo/:numeroserie')
@@ -84,4 +100,11 @@ return this.medicionService.findByEstacionNumeroSerie(numero_serie,tipo, page, l
 
     return this.medicionService.testSocket(socketDto, event);
   }
+
+  @Post('transferToHistorico')
+  transferToHistorico() {
+    return this.medicionService.transferToHistorico();
+  }
+
+  
 }
