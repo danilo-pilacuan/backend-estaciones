@@ -68,7 +68,7 @@ import { ApiProperty } from '@nestjs/swagger';
     snr: number;
   
     @IsInt()
-    channel: number;
+    channel?: number;
   
     @IsInt()
     rfChain: number;
@@ -159,14 +159,15 @@ import { ApiProperty } from '@nestjs/swagger';
     @IsObject()
     object: Record<string, string>;
   
-    @ApiProperty({ type: [RxInfoDto] })
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => RxInfoDto)
-    rxInfo: RxInfoDto[];
+      
+    
+    // @ApiProperty()
+    // @IsObject()
+    // rxInfo: Record<string, string>;
   
-    @ApiProperty()
-    @ValidateNested()
-    @Type(() => TxInfoDto)
-    txInfo: TxInfoDto;
+  
+    // @ApiProperty()
+    // @IsObject()
+    // txInfo: Record<string, string>;
+
   }
